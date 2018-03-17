@@ -112,8 +112,8 @@ def twettMessage(message):
     "Tweets the message appended in this command"
     if checkApi(message.chat.id):
         api =getAPIObject(message.chat.id)
-        tweet(message.text, api)
-        bot.send_message(message.chat.id, "Tweet enviado!")
+
+        bot.send_message(message.chat.id,tweet(message.text, api))
     else:
         send_to_register(message.chat.id)
 
