@@ -34,7 +34,7 @@ def write_db(chat_id,values):
     if (len(datos) != 4):
         datos.append(str(values))
     else:
-        print "You should delete your user first"
+        print("You should delete your user first")
     with open("usuarios.json","w") as file: json.dump(usuarios,file,indent=2)
 
 
