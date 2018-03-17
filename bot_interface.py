@@ -129,8 +129,8 @@ def tweets_tl(api_object):
         print("--------")
 
 @bot.message_handler(commands=["del"])
-def del(message):
-    chat_id = message.cha.id
+def delete(message):
+    chat_id = message.chat.id
     bot.send_message(chat_id,del_user(chat_id))
 
 bot.polling(True)
