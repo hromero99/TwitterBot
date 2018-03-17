@@ -101,3 +101,24 @@ def twettMessage(message):
     tweet(str(messageText), api)
     bot.send_message(message.chat.id, "Tweet enviado!")
 bot.polling(True)
+
+@bot.message_handler(commands=['fav'])
+def fav_tweets(message, api_object):
+    tl = api_object.home_timeline()
+    tweetsTBFAV=util.extract_arguments(message.text)
+    for n_tweets in tweetsTBFAV:
+        api_object.retweet(tl[n_tweets].id)
+
+@bot.message_handler(commands=['rt'])
+def retweet_tweets(message, api_object):
+    tl = api_object.home_timeline()
+    tweetsTBRT=util.extract_arguments(message.text)
+    for n_tweets in tweetsTBRT:
+        api_object.retweet(tl[n_tweets].id)
+
+@bot.message_handler(commands=['timeline']) #display timeline
+def tweets_tl(api_object):
+    tweets = api_object.home_timeline()
+    for tweet in tweets:
+        print(tweet.text)
+        print("--------")
