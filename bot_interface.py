@@ -134,8 +134,6 @@ def bot_displayinfo(message):
         #Now we have to print the tweets in the chat
         for tweet in timeLine:
             textoAEnviar = u'@'.join((tweet.user.screen_name,"\n",tweet.text)).encode("utf-8").strip()
-            #textoAEnviar = u"@" + tweet.user.screen_name.decode("utf-8","ignore") + u"\n"
-            #textoAEnviar += tweet.text.decode("utf-8","ignore")
             msg = bot.send_message(message.chat.id, textoAEnviar, reply_markup=keyboard)
             listOfTweets[msg.message_id] = [int(tweet.id)]
     else:
