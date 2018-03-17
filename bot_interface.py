@@ -5,6 +5,7 @@ from libs.config import token
 from libs.login_functions import *
 from libs.bot_functions import *
 from libs.tweet import *
+from libs.twitter import *
 
 bot = telebot.TeleBot(token)
 
@@ -100,6 +101,25 @@ def access_token_secret_key(message):
         # Add one more to the users step
 
     user_step[chat_id] = -1
+
+
+@bot.message_handler(commands=["tweet"])
+def tweetMessage(message):
+    "Tweets the message appended in this command"
+    tweet(message.text, api)
+    bot.send_message(message.chat.id, "Tweet enviado!")
+
+@bot.message_handler(commands=['fav'])
+def bot_fav(message):
+    fav_tweets(message)
+
+@bot.message_handler(commands=['rt'])
+def bot_rt(message):
+    retweet_tweets(message)
+
+@bot.message_handler(commands=['timeline'])
+def bot_displayinfo(message):
+    imprimir(message)
 
 @bot.message_handler(commands=["del"])
 def delete(message):
