@@ -35,7 +35,7 @@ def bot_starting(message):
 def register_function(message):
     chat_id = message.chat.id
     #TODO: Add some restrictions to the register
-    if ( len (usuarios[chat_id]) == 4):
+    if ( len (usuarios[str(chat_id)]) == 4):
         bot.send_message(chat_id,"Ya has introducido los datos, tienes que hacer un delete")
 
     bot.send_message(chat_id,"Procede a introducir la informacion")
@@ -103,7 +103,6 @@ def twettMessage(message):
     api = getAPIObject(message.chat.id)
     tweet(str(messageText), api)
     bot.send_message(message.chat.id, "Tweet enviado!")
-bot.polling(True)
 
 @bot.message_handler(commands=['fav'])
 def fav_tweets(message, api_object):
@@ -125,3 +124,10 @@ def tweets_tl(api_object):
     for tweet in tweets:
         print(tweet.text)
         print("--------")
+
+@bot.message_handler(commands=["del"])
+def del(message):
+    chat_id = message.cha.id
+    bot.send_message(chat_id,del_user(chat_id))
+
+bot.polling(True)
