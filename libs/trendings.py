@@ -5,7 +5,7 @@ from bot_functions import *
 
 def get_trending(api):
 
-    trending = api.trends_place()
+    trending = api.trends_place(766273)
 
     hashtag = trending[0]['trends']
     utf_hashtag = []
