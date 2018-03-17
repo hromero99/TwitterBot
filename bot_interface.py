@@ -193,4 +193,6 @@ def callback_fav(call):
     api = getAPIObject(call.message.chat.id)
     api.favorite(str(listOfTweets[call.message_id]))
     bot.send_message(call.message.chat.id, "Favorito guardado!")
+
+
 bot.polling(True)

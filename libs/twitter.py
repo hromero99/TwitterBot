@@ -15,8 +15,8 @@ def fav_tweets(message):
 def retweet_tweets(message):
     chat_id = message.chat.id
     api = getAPIObject(chat_id)
-    tl = api.home_timeline()
-    imprimir(tl, bot, chat_id)
+    #tl = api.home_timeline()
+    #imprimir(tl, bot, chat_id)
     tweetsTBRT=util.extract_arguments(message.text)
     for n_tweets in tweetsTBRT:
         api.retweet(tl[n_tweets].id)
