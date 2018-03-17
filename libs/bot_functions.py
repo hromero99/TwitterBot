@@ -17,7 +17,7 @@ def getAPIObject(user_id):
 
 def checkApi(user_id):
     "Functions that check if an user can create the api"
-    if user_id in usuarios.keys():
+    if user_id in usuarios:
         listOfTokens = usuarios[str(user_id)]
         if len(listOfTokens) != 4:
             return False
