@@ -1,5 +1,5 @@
 import tweepy
-
+import json
 
 def tweet(message, api, idToReply = None, mediaURI = None):
     "Function that sends tweet from your account"
