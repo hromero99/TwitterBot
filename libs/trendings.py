@@ -5,14 +5,14 @@ from bot_functions import *
 
 def get_trending(api):
 
-        trending = api.trends_place(766273)
-
+    trending = api.trends_place(766273)
+    #Obtengo un diccionario de los hashtag
     hashtag = trending[0]['trends']
+    print hashtag
     utf_hashtag = []
-    for tag in range(0,len(hashtag)):
-        hashtag_string = hashtag[tag]['name']
-        if hashtag_string[0] == "#":
+    for tag in range(0,10):
+        hashtag_string =  hashtag[tag]['name']
 
-            utf_hashtag.append(hashtag_string)
+        utf_hashtag.append(hashtag_string)
 
     return  utf_hashtag

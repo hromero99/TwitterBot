@@ -1,5 +1,6 @@
 import telebot
 import json
+from libs.trendings import *
 from libs.config import token
 from libs.login_functions import *
 from libs.bot_functions import *
@@ -117,6 +118,12 @@ def twettMessage(message):
     else:
         send_to_register(message.chat.id)
 
+@bot.message_handler(commands=["trends"])
+def send_trends(message):
+    api = getAPIObject(message.chat.id)
+    trendings = get_trending(api)
+    for x in trendings:
+        bot.send_message(message.chat.id, x)
 
 
 bot.polling(True)
