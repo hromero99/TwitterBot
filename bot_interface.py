@@ -2,7 +2,7 @@ import telebot
 import json
 from libs.config import token
 from libs.login_functions import *
-from bot_functions import *
+from libs.bot_functions import *
 
 bot = telebot.TeleBot(token)
 
