@@ -125,7 +125,7 @@ def bot_displayinfo(message):
         timeLine = getTimeLineTweets(message, api)
         #Now we have to print the tweets in the chat
         for tweet in timeLine:
-            bot.send_message(message.chat.id, str(tweet.text), reply_markup=keyboard)
+            bot.send_message(message.chat.id, str(tweet.text.encode('utf-8')), reply_markup=keyboard)
     else:
         send_to_register(message.chat.id)
 
@@ -176,12 +176,12 @@ def inline_trends(message):
     bot.answer_inline_query(message.id,lista,cache_time=100)
 
 @bot.callback_query_handler(func=lambda call: call.data == "rt")
-def callback_Rt:
+def callback_Rt(call):
     "function for the rt of a tweet"
     print "RT"
 
 @bot.callback_query_handler(func=lambda call: call.data == "fav")
-def callback_Rt:
+def callback_fav(call):
     "function fot the fav of a tweet"
     print "Fav"
 
