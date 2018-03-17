@@ -38,3 +38,10 @@ def write_db(chat_id,values):
     with open("usuarios.json","w") as file: json.dump(usuarios,file,indent=2)
 
 
+def del_user(chat_id):
+    try:
+        usuarios[str(chat_id)] = []
+        save_user()
+        return  "Usuario elminado correctamente"
+    except:
+        return "Error al eliminar el usuario"

@@ -2,8 +2,9 @@ import telebot
 import json
 from libs.config import token
 from libs.login_functions import *
-from bot_functions import *
-
+from libs.bot_functions import *
+from libs.trendings import *
+import time
 bot = telebot.TeleBot(token)
 
 user_step={}
@@ -95,12 +96,12 @@ def access_token_secret_key(message):
         # Add one more to the users step
 
     user_step[chat_id] = -1
-
+'''
 @bot.message_handler(commands=["tweet"])
 def twettMessage(message):
     "Tweets the message appended in this command"
     tweet(message.text, api)
-    bot.send_message(message.chat.id, "Tweet enviado!")
+    bot.send_message(message.chat.id, "Tweet enviado!")'''
 
 @bot.message_handler(commands=['fav'])
 def fav_tweets(message, api_object):
@@ -127,5 +128,14 @@ def tweets_tl(api_object):
 def delete(message):
     chat_id = message.chat.id
     bot.send_message(chat_id,del_user(chat_id))
+
+@bot.message_handler(commands=["trendings"])
+def show_trending(message):
+    chat_id = message.chat.id
+    api = getAPIObject(chat_id)
+    info = get_trending(api)
+    for x in info:
+        bot.send_message(chat_id,x)
+        time.sleep(2)
 
 bot.polling(True)
