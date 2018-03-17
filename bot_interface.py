@@ -2,6 +2,7 @@ import telebot
 import json
 from libs.config import token
 from libs.login_functions import *
+from libs.tweet import *
 from bot_functions import *
 
 bot = telebot.TeleBot(token)
@@ -99,6 +100,7 @@ def access_token_secret_key(message):
 @bot.message_handler(commands=["tweet"])
 def twettMessage(message):
     "Tweets the message appended in this command"
+    api = getAPIObject(message.chat.id)
     tweet(message.text, api)
     bot.send_message(message.chat.id, "Tweet enviado!")
 
