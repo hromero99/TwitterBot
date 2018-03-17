@@ -35,6 +35,9 @@ def bot_starting(message):
 def register_function(message):
     chat_id = message.chat.id
     #TODO: Add some restrictions to the register
+    if ( len (usuarios[chat_id]) == 4):
+        bot.send_message(chat_id,"Ya has introducido los datos, tienes que hacer un delete")
+
     bot.send_message(chat_id,"Procede a introducir la informacion")
     bot.send_message(chat_id,"Introduce el consumer key")
     user_step[chat_id] = 1
@@ -96,7 +99,7 @@ def access_token_secret_key(message):
 @bot.message_handler(commands=["tweet"])
 def twettMessage(message):
     "Tweets the message appended in this command"
-    messageText = m.text.split()[1:]
+    messageText = message.text.split()[1:]
     api = getAPIObject(message.chat.id)
     tweet(str(messageText), api)
     bot.send_message(message.chat.id, "Tweet enviado!")
