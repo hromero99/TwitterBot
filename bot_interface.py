@@ -17,6 +17,8 @@ def get_user_sept(chat_id):
         user_step[chat_id] = 0
         return 0
 
+#Comando de bienvenida
+
 @bot.message_handler(commands=["start"])
 def bot_starting(message):
     chat_id = message.chat.id
@@ -27,35 +29,38 @@ def bot_starting(message):
         user_step[chat_id] = 0
 
 
+#Funcion para registrar nuevos usuarops o sobreescribir la informacion del usuario existente
 @bot.message_handler(commands=["register"])
 def register_function(message):
     chat_id = message.chat.id
 
-    bot.send_message(chat_id,"Procede a introducir la informacion")
 
+    bot.send_message(chat_id,"Procede a introducir la informacion")
+    bot.send_message(chat_id,"Introduce el consumer key")
     user_step[chat_id] = 1
 
 @bot.message_handler(func=lambda message: get_user_sept(message.chat.id) == 1)
 def consumer_key(message):
     chat_id  = message.chat.id
-    key = telebot.util.extract_arguments(message.text)
-
+    key = message.text
     if (len(str(key)) != 25):
         bot.send_message(chat_id, "No has el consumer key")
     else:
         write_db(chat_id,key)
+        bot.send_message(chat_id, "Introduce el Consumer Secret Key")
         user_step[chat_id] = 2
 
 
 @bot.message_handler(func=lambda message: get_user_sept(message.chat.id) == 2)
 def consumer_secret_key(message):
     chat_id = message.chat.id
-    key = telebot.util.extract_arguments(message.text)
-    if len(key) != 50:
+    key = message.text
+    if len(str(key)) != 50:
         bot.send_message("La longitud de la clave introducida no es correcta")
     else:
         # The key has the stimated length so we can continue
         write_db(chat_id,key)
+        bot.message_handler(chat_id,"Introduce el Access_token_key")
         # Add one more to the users step
         user_step[chat_id] += 1
 
@@ -64,7 +69,8 @@ def consumer_secret_key(message):
 
 def access_token_key(message):
     chat_id = message.chat.id
-    key = telebot.util.extract_arguments(message.text)
+    key = message.text
+
     if len(key) != 50:
         bot.send_message("La longitud de la clave introducida no es correcta")
     else:
@@ -72,13 +78,14 @@ def access_token_key(message):
         write_db(chat_id,key)
         # Add one more to the users step
         user_step[chat_id] += 1
+        bot.message_handler(chat_id, "Introduce al access token secret/")
 
 
 @bot.message_handler(func=lambda message: get_user_sept(message.chat.id) == 4)
 
 def access_token_secret_key(message):
     chat_id = message.chat.id
-    key = telebot.util.extract_arguments(message.text)
+    key = message.text
     if len(key) != 45:
         bot.send_message("La longitud de la clave introducida no es correcta")
     else:
