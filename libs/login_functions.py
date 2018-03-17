@@ -7,7 +7,7 @@ with open("usuarios.json") as file: usuarios = json.load(file)
 
 
 def is_user(chat_id):
-    if   ( usuarios.get(str(chat_id)) ) == None:
+    if   ( usuarios.get(str(chat_id)) ) == None or  (len(usuarios.get(str(chat_id))) != 4 ):
         return False
     else:
         return True

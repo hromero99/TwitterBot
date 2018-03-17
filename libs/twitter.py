@@ -1,16 +1,16 @@
+#-*-coding:utf-8 -*-
 import tweepy
 from telebot import util
 from libs.bot_functions import *
-from bot_interface import bot
 
 def fav_tweets(message):
     chat_id = message.chat.id
     api = getAPIObject(chat_id)
     tl = api.home_timeline()
-    imprimir(tl, bot, chat_id)
+    #imprimir(tl, bot, chat_id)
     tweetsTBFAV = util.extract_arguments(message.text)
     for n_tweets in tweetsTBFAV:
-        api.retweet(tl[n_tweets].id)
+        api.favorite(tl[n_tweets].id)
 
 def retweet_tweets(message):
     chat_id = message.chat.id

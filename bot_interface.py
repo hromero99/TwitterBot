@@ -1,4 +1,5 @@
 import telebot
+from telebot import *
 import json
 from libs.trendings import *
 from libs.config import token
@@ -7,8 +8,8 @@ from libs.bot_functions import *
 from libs.tweet import *
 from libs.twitter import *
 
-bot = telebot.TeleBot(token)
 
+bot = telebot.TeleBot(token)
 user_step={}
 
 #Funcion para obtener donde se encuentra el usuario
@@ -41,7 +42,7 @@ def bot_starting(message):
 def register_function(message):
     chat_id = message.chat.id
     #TODO: Add some restrictions to the register
-    if ( len (usuarios[str(chat_id)]) == 4):
+    if (len(usuarios[str(chat_id)]) == 4):
         bot.send_message(chat_id,"Ya has introducido los datos, tienes que hacer un delete")
 
     bot.send_message(chat_id,"Procede a introducir la informacion")
@@ -103,11 +104,7 @@ def access_token_secret_key(message):
     user_step[chat_id] = -1
 
 
-@bot.message_handler(commands=["tweet"])
-def tweetMessage(message):
-    "Tweets the message appended in this command"
-    tweet(message.text, api)
-    bot.send_message(message.chat.id, "Tweet enviado!")
+
 
 @bot.message_handler(commands=['fav'])
 def bot_fav(message):
@@ -145,5 +142,26 @@ def send_trends(message):
     for x in trendings:
         bot.send_message(message.chat.id, x)
 
+
+@bot.inline_handler(func=lambda query: True)
+def inline_trends(message):
+    user_id = message.from_user.id
+    if  not is_user(user_id):
+        return
+    api = getAPIObject(user_id)
+    trendings = get_trending(api)
+    i = 0
+    lista = []
+    for trend in trendings:
+        lista.append(
+            types.InlineQueryResultArticle(
+                i,
+                trend,
+                types.InputTextMessageContent(trend,parse_mode="Markdown"),
+                description=None
+            )
+        )
+        i = i+1
+    bot.answer_inline_query(message.id,lista,cache_time=100)
 
 bot.polling(True)
