@@ -2,6 +2,7 @@ import telebot
 import json
 from libs.config import token
 from libs.login_functions import *
+from bot_functions import *
 
 bot = telebot.TeleBot(token)
 
@@ -33,8 +34,7 @@ def bot_starting(message):
 @bot.message_handler(commands=["register"])
 def register_function(message):
     chat_id = message.chat.id
-
-
+    #TODO: Add some restrictions to the register
     bot.send_message(chat_id,"Procede a introducir la informacion")
     bot.send_message(chat_id,"Introduce el consumer key")
     user_step[chat_id] = 1
@@ -44,7 +44,7 @@ def consumer_key(message):
     chat_id  = message.chat.id
     key = message.text
     if (len(str(key)) != 25):
-        bot.send_message(chat_id, "No has el consumer key")
+        bot.send_message(chat_id, "La longitud de la clave introducida no es correcta")
     else:
         write_db(chat_id,key)
         bot.send_message(chat_id, "Introduce el Consumer Secret Key")
@@ -56,7 +56,7 @@ def consumer_secret_key(message):
     chat_id = message.chat.id
     key = message.text
     if len(str(key)) != 50:
-        bot.send_message("La longitud de la clave introducida no es correcta")
+        bot.send_message(chat_id, "La longitud de la clave introducida no es correcta")
     else:
         # The key has the stimated length so we can continue
         write_db(chat_id,key)
@@ -66,13 +66,12 @@ def consumer_secret_key(message):
 
 
 @bot.message_handler(func=lambda message: get_user_sept(message.chat.id) == 3)
-
 def access_token_key(message):
     chat_id = message.chat.id
     key = message.text
 
     if len(key) != 50:
-        bot.send_message("La longitud de la clave introducida no es correcta")
+        bot.send_message(chat_id, "La longitud de la clave introducida no es correcta")
     else:
         # The key has the stimated length so we can continue
         write_db(chat_id,key)
@@ -82,12 +81,11 @@ def access_token_key(message):
 
 
 @bot.message_handler(func=lambda message: get_user_sept(message.chat.id) == 4)
-
 def access_token_secret_key(message):
     chat_id = message.chat.id
     key = message.text
     if len(key) != 45:
-        bot.send_message("La longitud de la clave introducida no es correcta")
+        bot.send_message(chat_id, "La longitud de la clave introducida no es correcta")
     else:
         # The key has the stimated length so we can continue
         write_db(chat_id,key)
@@ -95,5 +93,11 @@ def access_token_secret_key(message):
 
     user_step[chat_id] = -1
 
-
+@bot.message_handler(commands=["tweet"])
+def twettMessage(message):
+    "Tweets the message appended in this command"
+    messageText = m.text.split()[0]
+    api = getAPIObject(message.chat.id)
+    tweet(messageText, api)
+    bot.send_message(message.chat.id, "Tweet enviado!")
 bot.polling(True)
