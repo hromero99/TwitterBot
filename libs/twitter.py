@@ -29,3 +29,7 @@ def tweet_analytics(message):
     select = input("Ver las estadísticas del tweet nº ")
     bot.send_message(chat_id, "El número de RTs es %d" % (tweets[select].retweet_count))
     bot.send_message(chat_id, "El número de FAVs es %d" % (tweets[select].favorite_count))
+
+def getTimeLineTweets(message, api, count):
+    "Returns the tweets of the timeline of the user"
+    return api.home_timeline()

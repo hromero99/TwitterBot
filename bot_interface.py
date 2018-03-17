@@ -114,7 +114,15 @@ def bot_rt(message):
 
 @bot.message_handler(commands=['timeline'])
 def bot_displayinfo(message):
-    imprimir(message)
+    if is_user(message.chat.id):
+        api =getAPIObject(message.chat.id)
+
+        timeLine = getTimeLineTweets(message, api)
+        #Now we have to print the tweets in the chat
+        for tweet in timeLine:
+            bot.send_message(message.chat.id, str(tweet.text))
+    else:
+        send_to_register(message.chat.id)
 
 @bot.message_handler(commands=["del"])
 def delete(message):
