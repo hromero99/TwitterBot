@@ -100,10 +100,10 @@ def access_token_secret_key(message):
 def twettMessage(message):
     "Tweets the message appended in this command"
     messageList = message.text.split()[1:]
-    message = str(messageList[0])
+    messageTweet = str(messageList[0])
     for i in messageList:
-        message = message + ' ' + i
-    api = getAPIObject(message.chat.id)
+        messageTweet = messageTweet + ' ' + i
+    api = getAPIObject(messageTweet.chat.id)
     tweet(str(messageText), api)
     bot.send_message(message.chat.id, "Tweet enviado!")
 
