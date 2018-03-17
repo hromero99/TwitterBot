@@ -2,7 +2,8 @@ import telebot
 import json
 from libs.config import token
 from libs.login_functions import *
-from bot_functions import *
+from libs.bot_functions import *
+from libs.twitter import *
 
 bot = telebot.TeleBot(token)
 
@@ -103,25 +104,16 @@ def twettMessage(message):
     bot.send_message(message.chat.id, "Tweet enviado!")
 
 @bot.message_handler(commands=['fav'])
-def fav_tweets(message, api_object):
-    tl = api_object.home_timeline()
-    tweetsTBFAV=util.extract_arguments(message.text)
-    for n_tweets in tweetsTBFAV:
-        api_object.retweet(tl[n_tweets].id)
+def bot_fav(message):
+    fav_tweets(message)
 
 @bot.message_handler(commands=['rt'])
-def retweet_tweets(message, api_object):
-    tl = api_object.home_timeline()
-    tweetsTBRT=util.extract_arguments(message.text)
-    for n_tweets in tweetsTBRT:
-        api_object.retweet(tl[n_tweets].id)
+def bot_rt(message):
+    retweet_tweets(message)
 
-@bot.message_handler(commands=['timeline']) #display timeline
-def tweets_tl(api_object):
-    tweets = api_object.home_timeline()
-    for tweet in tweets:
-        print(tweet.text)
-        print("--------")
+@bot.message_handler(commands=['timeline'])
+def bot_displayinfo(message):
+    imprimir(message)
 
 @bot.message_handler(commands=["del"])
 def delete(message):

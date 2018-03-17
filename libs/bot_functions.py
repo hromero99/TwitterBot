@@ -12,3 +12,9 @@ def getAPIObject(user_id):
         api = tweepy.API(auth)
     
     return api
+
+def imprimir(ListOfTweets, bot, chat_id):
+    i=1
+    for tweet in ListOfTweets:
+        bot.send_message(chat_id, "%d -> %s" % (i, tweet))
+        i=i+1
