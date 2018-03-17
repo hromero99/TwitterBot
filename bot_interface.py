@@ -99,7 +99,10 @@ def access_token_secret_key(message):
 @bot.message_handler(commands=["tweet"])
 def twettMessage(message):
     "Tweets the message appended in this command"
-    messageText = message.text.split()[1:]
+    messageList = message.text.split()[1:]
+    message = str(messageList[0])
+    for i in messageList:
+        message = message + ' ' + i
     api = getAPIObject(message.chat.id)
     tweet(str(messageText), api)
     bot.send_message(message.chat.id, "Tweet enviado!")
