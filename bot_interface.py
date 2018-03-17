@@ -1,3 +1,4 @@
+#-*- coding: utf-8 -*-
 import telebot
 from telebot import *
 import json
@@ -30,6 +31,11 @@ keyboard = types.InlineKeyboardMarkup()
 keyboard.add(types.InlineKeyboardButton('RT', callback_data='rt'),
              types.InlineKeyboardButton('Fav', callback_data='fav'))
 
+@bot.message_handler(commands=["help"])
+def say_help(message):
+    bot.send_message(message.chat.id,
+                     "Bienvenido a TwitterControleBot para poder usar correctamente tienes que obtener tus credenciales dirigete a \t https://dev.twitter.com/apps/new \t y posteriormente puedes registrarte con /register"
+                     )
 
 #Comando de bienvenida
 
@@ -40,6 +46,7 @@ def bot_starting(message):
         bot.send_message(chat_id,"Bienvenido...")
     else:
         bot.send_message(chat_id, add_user(chat_id))
+        say_help(message)
         user_step[chat_id] = 0
 
 
@@ -47,7 +54,7 @@ def bot_starting(message):
 @bot.message_handler(commands=["register"])
 def register_function(message):
     chat_id = message.chat.id
-    #TODO: Add some restrictions to the register
+
     if is_user(chat_id):
         bot.send_message(chat_id,"Ya has introducido los datos, tienes que hacer un delete")
 
@@ -126,10 +133,11 @@ def bot_displayinfo(message):
         timeLine = getTimeLineTweets(message, api)
         #Now we have to print the tweets in the chat
         for tweet in timeLine:
-            textoAEnviar = "@" + tweet.screen_name + "\n"
-            textoAEnviar += str(tweet.text.encode('utf-8'))
-            msg = bot.send_message(message.chat.id, textoAEnviar, reply_markup=keyboard, parse_mode="Markdown")
-            listOfTweets[msg.message_id] = tweet.id
+            textoAEnviar = u'@'.join((tweet.user.screen_name,"\n",tweet.text)).encode("utf-8").strip()
+            #textoAEnviar = u"@" + tweet.user.screen_name.decode("utf-8","ignore") + u"\n"
+            #textoAEnviar += tweet.text.decode("utf-8","ignore")
+            msg = bot.send_message(message.chat.id, textoAEnviar, reply_markup=keyboard)
+            listOfTweets[msg.message_id] = [int(tweet.id)]
     else:
         send_to_register(message.chat.id)
 
@@ -184,14 +192,14 @@ def callback_Rt(call):
     "function for the rt of a tweet"
     #Rt the tweet
     api = getAPIObject(call.message.chat.id)
-    api.retweet(str(listOfTweets[call.message_id]))
+    api.retweet(int(listOfTweets[call.message.message_id][0]))
     bot.send_message(call.message.chat.id, "RT guardado!")
 
 @bot.callback_query_handler(func=lambda call: call.data == "fav")
 def callback_fav(call):
     "function for giving a fav to a tweet"
     api = getAPIObject(call.message.chat.id)
-    api.favorite(str(listOfTweets[call.message_id]))
+    api.create_favorite(int(listOfTweets[call.message.message_id][0]))
     bot.send_message(call.message.chat.id, "Favorito guardado!")
 
 
