@@ -3,6 +3,7 @@ import json
 from libs.config import token
 from libs.login_functions import *
 from libs.bot_functions import *
+from libs.tweet import *
 
 bot = telebot.TeleBot(token)
 
@@ -17,6 +18,9 @@ def get_user_sept(chat_id):
         add_user(chat_id)
         user_step[chat_id] = 0
         return 0
+
+def send_to_register(chat_id):
+    bot.send_message(chat_id,"Error, tienes que registrar los datos")
 
 #Comando de bienvenida
 
@@ -96,36 +100,23 @@ def access_token_secret_key(message):
 
     user_step[chat_id] = -1
 
-@bot.message_handler(commands=["tweet"])
-def twettMessage(message):
-    "Tweets the message appended in this command"
-    tweet(message.text, api)
-    bot.send_message(message.chat.id, "Tweet enviado!")
-
-@bot.message_handler(commands=['fav'])
-def fav_tweets(message, api_object):
-    tl = api_object.home_timeline()
-    tweetsTBFAV=util.extract_arguments(message.text)
-    for n_tweets in tweetsTBFAV:
-        api_object.retweet(tl[n_tweets].id)
-
-@bot.message_handler(commands=['rt'])
-def retweet_tweets(message, api_object):
-    tl = api_object.home_timeline()
-    tweetsTBRT=util.extract_arguments(message.text)
-    for n_tweets in tweetsTBRT:
-        api_object.retweet(tl[n_tweets].id)
-
-@bot.message_handler(commands=['timeline']) #display timeline
-def tweets_tl(api_object):
-    tweets = api_object.home_timeline()
-    for tweet in tweets:
-        print(tweet.text)
-        print("--------")
-
 @bot.message_handler(commands=["del"])
 def delete(message):
     chat_id = message.chat.id
     bot.send_message(chat_id,del_user(chat_id))
+
+#Comenzamos a usar la API
+
+@bot.message_handler(commands=["tweet"])
+def twettMessage(message):
+    "Tweets the message appended in this command"
+    if checkApi(message.chat.id):
+        api =getAPIObject(message.chat.id)
+        tweet(message.text, api)
+        bot.send_message(message.chat.id, "Tweet enviado!")
+    else:
+        send_to_register(message.chat.id)
+
+
 
 bot.polling(True)
