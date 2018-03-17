@@ -11,6 +11,7 @@ from libs.twitter import *
 
 bot = telebot.TeleBot(token)
 user_step={}
+listOfTweets = {}
 
 #Funcion para obtener donde se encuentra el usuario
 
@@ -125,7 +126,10 @@ def bot_displayinfo(message):
         timeLine = getTimeLineTweets(message, api)
         #Now we have to print the tweets in the chat
         for tweet in timeLine:
-            bot.send_message(message.chat.id, str(tweet.text.encode('utf-8')), reply_markup=keyboard)
+            textoAEnviar = "@" + tweet.screen_name + "\n"
+            textoAEnviar += str(tweet.text.encode('utf-8'))
+            msg = bot.send_message(message.chat.id, textoAEnviar, reply_markup=keyboard, parse_mode="Markdown")
+            listOfTweets[msg.message_id] = tweet.id
     else:
         send_to_register(message.chat.id)
 
@@ -178,11 +182,15 @@ def inline_trends(message):
 @bot.callback_query_handler(func=lambda call: call.data == "rt")
 def callback_Rt(call):
     "function for the rt of a tweet"
-    print "RT"
+    #Rt the tweet
+    api = getAPIObject(call.message.chat.id)
+    api.retweet(str(listOfTweets[call.message_id]))
+    bot.send_message(call.message.chat.id, "RT guardado!")
 
 @bot.callback_query_handler(func=lambda call: call.data == "fav")
 def callback_fav(call):
-    "function fot the fav of a tweet"
-    print "Fav"
-
+    "function for giving a fav to a tweet"
+    api = getAPIObject(call.message.chat.id)
+    api.favorite(str(listOfTweets[call.message_id]))
+    bot.send_message(call.message.chat.id, "Favorito guardado!")
 bot.polling(True)
