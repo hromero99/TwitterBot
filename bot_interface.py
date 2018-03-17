@@ -25,6 +25,11 @@ def get_user_sept(chat_id):
 def send_to_register(chat_id):
     bot.send_message(chat_id,"Error, tienes que registrar los datos")
 
+keyboard = types.InlineKeyboardMarkup()
+keyboard.add(types.InlineKeyboardButton('RT', callback_data='rt'),
+             types.InlineKeyboardButton('Fav', callback_data='fav'))
+
+
 #Comando de bienvenida
 
 @bot.message_handler(commands=["start"])
@@ -120,7 +125,7 @@ def bot_displayinfo(message):
         timeLine = getTimeLineTweets(message, api)
         #Now we have to print the tweets in the chat
         for tweet in timeLine:
-            bot.send_message(message.chat.id, str(tweet.text))
+            bot.send_message(message.chat.id, str(tweet.text), reply_markup=keyboard)
     else:
         send_to_register(message.chat.id)
 
@@ -169,5 +174,15 @@ def inline_trends(message):
         )
         i = i+1
     bot.answer_inline_query(message.id,lista,cache_time=100)
+
+@bot.callback_query_handler(func=lambda call: call.data == "rt")
+def callback_Rt:
+    "function for the rt of a tweet"
+    print "RT"
+
+@bot.callback_query_handler(func=lambda call: call.data == "fav")
+def callback_Rt:
+    "function fot the fav of a tweet"
+    print "Fav"
 
 bot.polling(True)
