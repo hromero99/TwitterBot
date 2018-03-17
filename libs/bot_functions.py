@@ -14,7 +14,7 @@ def getAPIObject(user_id):
             auth.set_access_token(str(listOfTokens[2]), str(listOfTokens[3]))
             api = tweepy.API(auth)
             #The user cannot create the api cause it's not registered
-            time.sleep(0.7)
+            time.sleep(1)
             return api
 
 def checkApi(user_id):
