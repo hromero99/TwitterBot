@@ -25,3 +25,46 @@ def checkApi(user_id):
             return False
         else:
             return True
+
+'''Login Functions'''
+
+
+def is_user(chat_id):
+    if   ( usuarios.get(str(chat_id)) ) == None or  (len(usuarios.get(str(chat_id))) != 4 ):
+        return False
+    else:
+        return True
+
+
+
+def save_user():
+
+    with open("usuarios.json","w") as file: json.dump(usuarios,file,indent=2)
+
+def add_user(chat_id):
+    if (is_user(chat_id)):
+        return "Ya eres un usuario"
+    else:
+        usuarios[str(chat_id)] = []
+        save_user()
+        return "Usuario agregado correctamente"
+
+
+def write_db(chat_id,values):
+    #.append(str(values))
+    datos  =  usuarios[str(chat_id)]
+
+    if (len(datos) != 4):
+        datos.append(str(values))
+    else:
+        print("You should delete your user first")
+    with open("usuarios.json","w") as file: json.dump(usuarios,file,indent=2)
+
+
+def del_user(chat_id):
+    try:
+        usuarios[str(chat_id)] = []
+        save_user()
+        return  "Usuario elminado correctamente"
+    except:
+        return "Error al eliminar el usuario"

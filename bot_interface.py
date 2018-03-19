@@ -2,11 +2,8 @@
 import telebot
 from telebot import *
 import json
-from libs.trendings import *
 from libs.config import token
-from libs.login_functions import *
 from libs.bot_functions import *
-from libs.tweet import *
 from libs.twitter import *
 
 
