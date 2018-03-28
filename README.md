@@ -2,7 +2,7 @@
 
 Este bot ha sido diseñado para implementar las funcionalidades de Twitter dentro de Telegram sin necesidad de salir de la propia aplicación, las funciones implementadas hasta el momento son:
 
-* Gestión de usuarios mediante CSV
+* Gestión de usuarios mediante Json
 * Enviar nuevos Tweets
 * Consultar el Timeine de los usuarios
     1. Poder indicar MG 
